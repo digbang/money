@@ -24,13 +24,9 @@
         "phpunit/phpunit": "^6.2",
         "mockery/mockery": "^0.9.9"
     },
-    "suggest": {
-        "moneyphp/money": "Work with money safer, easier, and fun!"
-    },
     "autoload": {
         "psr-4": {
-            "Digbang\\Money\\": "src/",
-            "Tests": "tests/"
+            "Digbang\\Money\\": "src/"
         },
         "files": [
             "src/helpers.php"
@@ -38,7 +34,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Digbang\\Utils\\": "tests/"
+            "Digbang\\Money\\Tests": "tests/"
         }
     }
 }
