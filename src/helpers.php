@@ -1,20 +1,23 @@
 <?php
 
 if (! function_exists('prettyMoney')) {
-    function prettyMoney(\Money\Money $money, int $decimals = 2): string
+    function prettyMoney(\Money\Money $money): string
     {
-        $currencySymbol = $money->getCurrency()->getCode();
+        /** @var \Money\Formatter\IntlMoneyFormatter $formatter */
+        $formatter = app(\Money\Formatter\IntlMoneyFormatter::class);
 
-        config('utils-money.symbols.' . $currencySymbol, '$');
+        $currencySymbol = config("money.symbols.{$money->getCurrency()->getCode()}", '$');
 
-        return $currencySymbol . ' ' . number_format($money->getAmount() / 100, $decimals, ',', '.');
+        return $currencySymbol . ' ' . $formatter->format($money);
     }
 }
 
 if (! function_exists('exportMoney')) {
-    function exportMoney(\Money\Money $money, int $decimals = 2): float
+    function exportMoney(\Money\Money $money): float
     {
-        return number_format($money->getAmount() / 100, $decimals, '.', '');
+        /** @var \Money\Formatter\DecimalMoneyFormatter $formatter */
+        $formatter = app(\Money\Formatter\DecimalMoneyFormatter::class);
+
+        return $formatter->format($money);
     }
 }
-

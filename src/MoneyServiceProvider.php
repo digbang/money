@@ -40,10 +40,14 @@ class MoneyServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(IntlMoneyFormatter::class, function () use ($config) {
-            return new IntlMoneyFormatter(
-                new \NumberFormatter($config->get(static::PACKAGE . '.locale'), \NumberFormatter::CURRENCY),
-                new ISOCurrencies()
-            );
+            $numberFormatter = new \NumberFormatter($config->get(static::PACKAGE . '.locale'), \NumberFormatter::CURRENCY);
+            $numberFormatter->setPattern(str_replace('¤', '', $numberFormatter->getPattern()));
+
+            return new IntlMoneyFormatter($numberFormatter, new ISOCurrencies());
+        });
+
+        $this->app->bind(DecimalMoneyFormatter::class, function () {
+            return new DecimalMoneyFormatter(new ISOCurrencies());
         });
 
         $this->app
