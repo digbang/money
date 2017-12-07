@@ -69,7 +69,7 @@ class MoneyServiceProvider extends ServiceProvider
 
         /** @var MappingDriverChain $chain */
         $chain = $entityManager->getConfiguration()->getMetadataDriverImpl();
-        $chain->addDriver($fluentDriver, 'Digbang\Money');
+        $chain->addDriver($fluentDriver, __NAMESPACE__);
     }
 
     protected function resources(): void
