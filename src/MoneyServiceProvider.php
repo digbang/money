@@ -6,9 +6,7 @@ use Digbang\Money\Doctrine\Mappings\Embeddables\CurrencyMapping;
 use Digbang\Money\Doctrine\Mappings\Embeddables\MoneyMapping;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\EntityManagerInterface;
-use Illuminate\Config\Repository as Config;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\View\Compilers\BladeCompiler;
 use LaravelDoctrine\Fluent\FluentDriver;
 use LaravelDoctrine\ORM\Configuration\MetaData\MetaDataManager;
 use Money\Currencies\ISOCurrencies;
@@ -27,20 +25,20 @@ class MoneyServiceProvider extends ServiceProvider
         $this->resources();
     }
 
-    public function register(Config $config)
+    public function register()
     {
         $this->mergeConfigFrom($this->configPath(), static::PACKAGE);
-        $this->registerMoney($config);
+        $this->registerMoney();
     }
 
-    private function registerMoney(Config $config)
+    private function registerMoney()
     {
         $this->app->bind(MoneyFormatter::class, function () {
             return new DecimalMoneyFormatter(new ISOCurrencies());
         });
 
-        $this->app->bind(IntlMoneyFormatter::class, function () use ($config) {
-            $numberFormatter = new \NumberFormatter($config->get(static::PACKAGE . '.locale'), \NumberFormatter::CURRENCY);
+        $this->app->bind(IntlMoneyFormatter::class, function () {
+            $numberFormatter = new \NumberFormatter($this->app['config']->get(static::PACKAGE . '.locale'), \NumberFormatter::CURRENCY);
             $numberFormatter->setPattern(str_replace('¤', '', $numberFormatter->getPattern()));
 
             return new IntlMoneyFormatter($numberFormatter, new ISOCurrencies());
@@ -50,8 +48,8 @@ class MoneyServiceProvider extends ServiceProvider
             return new DecimalMoneyFormatter(new ISOCurrencies());
         });
 
-        $this->app
-            ->make(BladeCompiler::class)
+        $this->app->make('view')
+            ->getEngineResolver()->resolve('blade')->getCompiler()
             ->directive('money', function (Money $expression) {
                 return "<?php echo prettyMoney($expression); ?>";
             });
@@ -77,7 +75,7 @@ class MoneyServiceProvider extends ServiceProvider
         $this->publishes([
             $this->configPath() => config_path(static::PACKAGE . '.php'),
         ],
-        'config');
+            'config');
     }
 
     /**
