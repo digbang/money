@@ -7,7 +7,6 @@ use Digbang\Money\Doctrine\Mappings\Embeddables\MoneyMapping;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\View\Compilers\BladeCompiler;
 use LaravelDoctrine\Fluent\FluentDriver;
 use LaravelDoctrine\ORM\Configuration\MetaData\MetaDataManager;
 use Money\Currencies\ISOCurrencies;
