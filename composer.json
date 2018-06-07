@@ -34,7 +34,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Digbang\\Money\\Tests": "tests/"
+            "Digbang\\Money\\Tests\\": "tests/"
         }
     }
 }
