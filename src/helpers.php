@@ -1,14 +1,18 @@
 <?php
 
 if (! function_exists('prettyMoney')) {
-    function prettyMoney(\Money\Money $money): string
+    function prettyMoney(\Money\Money $money, $displaySymbol = true): string
     {
         /** @var \Money\Formatter\IntlMoneyFormatter $formatter */
         $formatter = app(\Money\Formatter\IntlMoneyFormatter::class);
 
-        $currencySymbol = config("money.symbols.{$money->getCurrency()->getCode()}", '$');
+        if ($displaySymbol) {
+            $currencySymbol = config("money.symbols.{$money->getCurrency()->getCode()}", '$');
 
-        return $currencySymbol . ' ' . $formatter->format($money);
+            return $currencySymbol . ' ' . $formatter->format($money);
+        }
+
+        return $formatter->format($money);
     }
 }
 
