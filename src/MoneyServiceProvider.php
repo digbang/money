@@ -67,7 +67,7 @@ class MoneyServiceProvider extends ServiceProvider
 
         /** @var MappingDriverChain $chain */
         $chain = $entityManager->getConfiguration()->getMetadataDriverImpl();
-        $chain->addDriver($fluentDriver, __NAMESPACE__);
+        $chain->addDriver($fluentDriver, 'Money');
     }
 
     protected function resources(): void
