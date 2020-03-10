@@ -16,7 +16,7 @@
     "require": {
         "php": ">=7.1",
         "moneyphp/money": "^3.0",
-        "laravel/framework": "^5.4.|^6.0",
+        "laravel/framework": "^5.4|^6.0|^7.0",
         "laravel-doctrine/fluent": "^1.1",
         "laravel-doctrine/orm": "^1.3"
     },
