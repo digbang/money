@@ -6,6 +6,7 @@ use Digbang\Money\Doctrine\Mappings\Embeddables\CurrencyMapping;
 use Digbang\Money\Doctrine\Mappings\Embeddables\MoneyMapping;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Illuminate\Support\ServiceProvider;
 use LaravelDoctrine\Fluent\FluentDriver;
 use LaravelDoctrine\ORM\Configuration\MetaData\MetaDataManager;
@@ -19,9 +20,12 @@ class MoneyServiceProvider extends ServiceProvider
 {
     private const PACKAGE = 'money';
 
-    public function boot(EntityManagerInterface $entityManager, MetaDataManager $metadata)
+    public function boot(ManagerRegistry $managerRegistry, MetaDataManager $metadata)
     {
-        $this->registerDoctrineMappings($entityManager, $metadata);
+        /** @var EntityManager $entityManager */
+        foreach ($managerRegistry->getManagers() as $entityManager) {
+            $this->doctrineMappings($entityManager, $metadata);
+        }
         $this->resources();
     }
 
@@ -55,7 +59,7 @@ class MoneyServiceProvider extends ServiceProvider
             });
     }
 
-    protected function registerDoctrineMappings(EntityManagerInterface $entityManager, MetaDataManager $metadata): void
+    protected function doctrineMappings(EntityManagerInterface $entityManager, MetaDataManager $metadata): void
     {
         /** @var FluentDriver $fluentDriver */
         $fluentDriver = $metadata->driver('fluent', [
